@@ -31,12 +31,12 @@ npm install
 npm install selenium-webdriver
 
 ```
-4. Install the Selenium Webdriver:
+4. Install the Mocha Framework:
 ```bash
 npm install mocha
 
 ```
-5. Install the Selenium Webdriver:
+5. Install the Chrome Driver:
 ```bash
 npm install chromedriver
 
