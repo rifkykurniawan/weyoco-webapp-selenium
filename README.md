@@ -18,7 +18,7 @@ Before running the tests, make sure you have the following installed:
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/rifkykurniawan/Selenium-Template.git
+git clone https://github.com/rifkykurniawan/weyoco-webapp-selenium.git
 cd Selenium-Template
 ```
 
