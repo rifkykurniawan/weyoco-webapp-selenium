@@ -1,11 +1,11 @@
-const {Builder} = require('selenium-webdriver');
+const {Builder, until} = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const assert = require('assert');
-const PageObjects = require('../src/Pages/PageObjects');
+const HomePage = require('../src/Pages/HomePage');
 
 describe('Test Scenarios', function() {
     let driver;
-    let pageObjects;
+    let homePage;
 
     this.timeout(10000);
     beforeEach(async function() {
@@ -14,21 +14,39 @@ describe('Test Scenarios', function() {
             .forBrowser('chrome')
             .setChromeOptions(options)
             .build();     
-        pageObjects = new PageObjects(driver);
-        await driver.get('https://www.google.co.id/');
+        homePage = new HomePage(driver);
+        await driver.get('https://weyoco.com');
     });
 
-    
-    it('Test Case 1', async () => {
+    it('TC-HP-001 - Verify the home page', async () => {
         const currentUrl = await driver.getCurrentUrl();
-        assert.strictEqual(currentUrl, 'https://www.google.co.id/');
-        await pageObjects.search('Selenium');
-        await driver.sleep(1000);
-        await pageObjects.clickSearchButton();
+        assert.strictEqual(currentUrl, 'https://weyoco.com/en/posts');
+        assert.strictEqual(await homePage.isWeyocoLogoDisplayed(), true);
+        assert.strictEqual(await homePage.isSearchBarDisplayed(), true);
+        assert.strictEqual(await homePage.isHomeButtonDisplayed(), true);
+        assert.strictEqual(await homePage.isCollaborationButtonDisplayed(), true);
+        assert.strictEqual(await homePage.isChangeLanguageButtonDisplayed(), true);
+        assert.strictEqual(await homePage.isContentCardDisplayed(), true);
+        assert.strictEqual(await homePage.isTryTheAppButtonDisplayed(), true);
+        assert.strictEqual(await homePage.isDownloadAppButtonDisplayed(), true);
+        assert.strictEqual(await homePage.isScrollToTopButtonDisplayed(), true);
+        assert.strictEqual(await homePage.isListTopicsButtonDisplayed(), true);
     });
+    it ('TC-HP-002 - Verify click collaboration menu', async () => {
+        await homePage.clickCollaborationButton();
+        const currentUrl = await driver.getCurrentUrl();
+        assert.strictEqual(currentUrl, 'https://weyoco.com/en/posts');
+    })
+    it.only ('TC-HP-003 - Verify click each topic', async () => {
+        await homePage.clickBakingSubTopics();
+        await driver.wait(until.urlIs('https://weyoco.com/en/posts?category=Baking'), 5000);
+        assert.strictEqual(await homePage.getButtonCssBakingTopics(), 'rgba(255, 73, 20, 1)');
+        await homePage.clickForBeginnerTopic();
+    })
 
-    after(() => {
-        driver.quit();
+    afterEach(async () => {
+        if (driver) {
+            await driver.quit();
+        }
     });
-    
 });

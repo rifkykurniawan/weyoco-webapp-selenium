@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "chromedriver": "^133.0.0",
-    "mocha": "^11.1.0",
-    "selenium-webdriver": "^4.28.1"
+    "chromedriver": "^136.0.0",
+    "mocha": "^11.2.2",
+    "selenium-webdriver": "^4.32.0"
   },
   "name": "selenium-basiccomponent",
   "version": "1.0.0",
