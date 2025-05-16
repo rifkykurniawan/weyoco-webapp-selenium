@@ -17,6 +17,59 @@ class HomePage {
         this.listTopicsButton = By.xpath('/html/body/div[1]/div[2]/div')
         this.bakingSubTopics = By.xpath('/html/body/div[1]/div[2]/div/button[2]')
         this.forBeginnerTopic = By.xpath('/html/body/div[1]/div[2]/div/button[3]')
+        this.oldRecipesTopic = By.xpath('/html/body/div[1]/div[2]/div/button[4]')
+        this.vegetarianTopic = By.xpath('/html/body/div[1]/div[2]/div/button[5]')
+        this.riceCookerTopic = By.xpath('/html/body/div[1]/div[2]/div/button[6]')
+        this.recipeFromCookingTopic = By.xpath('/html/body/div[1]/div[2]/div/button[7]')
+        this.card1 = By.xpath('/html/body/div[1]/div[2]/main/div[1]/a[1]/div/div[1]/div/div[2]')
+    }
+
+    async clickCard1() {
+        const card1 = await this.driver.findElement(this.contentCard);
+        await card1.click();
+    }
+
+    async getButtonCssForRecipeFromCookingTopic() {
+        const recipeFromCookingTopic = await this.driver.findElement(this.recipeFromCookingTopic);
+        return await recipeFromCookingTopic.getCssValue('background-color');
+    }
+
+    async clickRecipeFromCookingTopic() {
+        const recipeFromCookingTopic = await this.driver.findElement(this.recipeFromCookingTopic);
+        await recipeFromCookingTopic.click();
+    }
+    async getButtonCssForRiceCookerTopic() {
+        const riceCookerTopic = await this.driver.findElement(this.riceCookerTopic);
+        return await riceCookerTopic.getCssValue('background-color');
+    }
+    async clickRiceCookerTopic() {
+        const riceCookerTopic = await this.driver.findElement(this.riceCookerTopic);
+        await riceCookerTopic.click();
+    }
+
+    async getButtonCssForVegetarianTopic() {
+        const vegetarianTopic = await this.driver.findElement(this.vegetarianTopic);
+        return await vegetarianTopic.getCssValue('background-color');
+    }
+
+    async clickVegetarianTopic() {
+        const vegetarianTopic = await this.driver.findElement(this.vegetarianTopic);
+        await vegetarianTopic.click();
+    }
+
+    async getButtonCssForOldRecipesTopic() {
+        const oldRecipesTopic = await this.driver.findElement(this.oldRecipesTopic);
+        return await oldRecipesTopic.getCssValue('background-color');
+    }
+
+    async clickOldRecipesTopic() {
+        const oldRecipesTopic = await this.driver.findElement(this.oldRecipesTopic);
+        await oldRecipesTopic.click();
+    }
+
+    async getButtonCssForBeginnerTopics() {
+        const forBeginnerTopic = await this.driver.findElement(this.forBeginnerTopic);
+        return await forBeginnerTopic.getCssValue('background-color');
     }
 
     async clickForBeginnerTopic() {

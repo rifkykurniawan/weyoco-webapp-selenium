@@ -37,11 +37,29 @@ describe('Test Scenarios', function() {
         const currentUrl = await driver.getCurrentUrl();
         assert.strictEqual(currentUrl, 'https://weyoco.com/en/posts');
     })
-    it.only ('TC-HP-003 - Verify click each topic', async () => {
+    it ('TC-HP-003 - Verify click each topic', async () => {
         await homePage.clickBakingSubTopics();
         await driver.wait(until.urlIs('https://weyoco.com/en/posts?category=Baking'), 5000);
         assert.strictEqual(await homePage.getButtonCssBakingTopics(), 'rgba(255, 73, 20, 1)');
         await homePage.clickForBeginnerTopic();
+        await driver.wait(until.urlIs('https://weyoco.com/en/posts?category=For+beginner'), 5000);
+        assert.strictEqual(await homePage.getButtonCssForBeginnerTopics(), 'rgba(255, 73, 20, 1)');
+        await homePage.clickOldRecipesTopic();
+        await driver.wait(until.urlIs('https://weyoco.com/en/posts?category=Old+recipes'), 5000);
+        assert.strictEqual(await homePage.getButtonCssForOldRecipesTopic(), 'rgba(255, 73, 20, 1)');
+        await homePage.clickVegetarianTopic();
+        await driver.wait(until.urlIs('https://weyoco.com/en/posts?category=Vegetarian'), 5000);
+        assert.strictEqual(await homePage.getButtonCssForVegetarianTopic(), 'rgba(255, 73, 20, 1)');
+        await homePage.clickRiceCookerTopic();
+        await driver.wait(until.urlIs('https://weyoco.com/en/posts?category=Rice+cooker+recipes'), 5000);
+        assert.strictEqual(await homePage.getButtonCssForRiceCookerTopic(), 'rgba(255, 73, 20, 1)');
+        await homePage.clickRecipeFromCookingTopic();
+        await driver.wait(until.urlIs('https://weyoco.com/en/posts?category=Recipes+from+cooking+shows'), 5000);
+        assert.strictEqual(await homePage.getButtonCssForRecipeFromCookingTopic(), 'rgba(255, 73, 20, 1)');
+    })
+    it.only ('TC-HP-004 - Verify click post card', async () => {
+        await homePage.clickCard1();
+        assert.strictEqual(await homePage.isBackButtonDisplayed(), true);
     })
 
     afterEach(async () => {

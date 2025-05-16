@@ -8,7 +8,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/TestCases.js"
+    "test": "mocha tests/Home_Test.js"
   },
   "keywords": [],
   "author": "",
