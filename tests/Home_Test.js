@@ -2,10 +2,12 @@ const {Builder, until} = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const assert = require('assert');
 const HomePage = require('../src/Pages/HomePage');
+const PostPage = require('../src/Pages/PostPage');
 
 describe('Test Scenarios', function() {
     let driver;
     let homePage;
+    let postPage;
 
     this.timeout(10000);
     beforeEach(async function() {
@@ -15,6 +17,7 @@ describe('Test Scenarios', function() {
             .setChromeOptions(options)
             .build();     
         homePage = new HomePage(driver);
+        postPage = new PostPage(driver);
         await driver.get('https://weyoco.com');
     });
 
@@ -57,13 +60,17 @@ describe('Test Scenarios', function() {
         await driver.wait(until.urlIs('https://weyoco.com/en/posts?category=Recipes+from+cooking+shows'), 5000);
         assert.strictEqual(await homePage.getButtonCssForRecipeFromCookingTopic(), 'rgba(255, 73, 20, 1)');
     })
-    it.only ('TC-HP-004 - Verify click post card', async () => {
+    it ('TC-HP-004 - Verify click post card', async () => {
         await homePage.clickCard1();
-        assert.strictEqual(await homePage.isBackButtonDisplayed(), true);
+        await postPage.isThankButtonDisplayed();
+        await driver.navigate().back();
+        const currentUrl = await driver.getCurrentUrl();
+        assert.strictEqual(currentUrl, 'https://weyoco.com/en/posts');
     })
 
     afterEach(async () => {
         if (driver) {
+            await driver.sleep(1000);
             await driver.quit();
         }
     });

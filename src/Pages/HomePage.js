@@ -1,4 +1,4 @@
-const {By} = require('selenium-webdriver');
+const {By,until} = require('selenium-webdriver');
 
 class HomePage {
     constructor(driver) {
@@ -22,10 +22,12 @@ class HomePage {
         this.riceCookerTopic = By.xpath('/html/body/div[1]/div[2]/div/button[6]')
         this.recipeFromCookingTopic = By.xpath('/html/body/div[1]/div[2]/div/button[7]')
         this.card1 = By.xpath('/html/body/div[1]/div[2]/main/div[1]/a[1]/div/div[1]/div/div[2]')
-    }
+    }  
 
     async clickCard1() {
-        const card1 = await this.driver.findElement(this.contentCard);
+        await this.driver.wait(until.elementLocated(this.card1), 5000);
+        const card1 = await this.driver.findElement(this.card1);
+        await this.driver.wait(until.elementIsVisible(card1), 5000);
         await card1.click();
     }
 
