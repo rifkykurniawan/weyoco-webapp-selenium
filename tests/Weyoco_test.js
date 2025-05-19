@@ -4,7 +4,7 @@ const assert = require('assert');
 const HomePage = require('../src/Pages/HomePage');
 const PostPage = require('../src/Pages/PostPage');
 
-describe('Test Scenarios', function() {
+describe('Weyoco Website', function() {
     let driver;
     let homePage;
     let postPage;
@@ -18,10 +18,11 @@ describe('Test Scenarios', function() {
             .build();     
         homePage = new HomePage(driver);
         postPage = new PostPage(driver);
+        await driver.manage().window().maximize();
         await driver.get('https://weyoco.com');
     });
 
-    it('TC-HP-001 - Verify the home page', async () => {
+    it('TC-001 - Verify the home page', async () => {
         const currentUrl = await driver.getCurrentUrl();
         assert.strictEqual(currentUrl, 'https://weyoco.com/en/posts');
         assert.strictEqual(await homePage.isWeyocoLogoDisplayed(), true);
@@ -35,12 +36,12 @@ describe('Test Scenarios', function() {
         assert.strictEqual(await homePage.isScrollToTopButtonDisplayed(), true);
         assert.strictEqual(await homePage.isListTopicsButtonDisplayed(), true);
     });
-    it ('TC-HP-002 - Verify click collaboration menu', async () => {
+    it ('TC-002 - Verify click collaboration menu', async () => {
         await homePage.clickCollaborationButton();
         const currentUrl = await driver.getCurrentUrl();
         assert.strictEqual(currentUrl, 'https://weyoco.com/en/posts');
     })
-    it ('TC-HP-003 - Verify click each topic', async () => {
+    it ('TC-003 - Verify click each topic', async () => {
         await homePage.clickBakingSubTopics();
         await driver.wait(until.urlIs('https://weyoco.com/en/posts?category=Baking'), 5000);
         assert.strictEqual(await homePage.getButtonCssBakingTopics(), 'rgba(255, 73, 20, 1)');
@@ -60,17 +61,77 @@ describe('Test Scenarios', function() {
         await driver.wait(until.urlIs('https://weyoco.com/en/posts?category=Recipes+from+cooking+shows'), 5000);
         assert.strictEqual(await homePage.getButtonCssForRecipeFromCookingTopic(), 'rgba(255, 73, 20, 1)');
     })
-    it ('TC-HP-004 - Verify click post card', async () => {
+    it ('TC-004 - Verify click post card', async () => {
         await homePage.clickCard1();
         await postPage.isThankButtonDisplayed();
         await driver.navigate().back();
         const currentUrl = await driver.getCurrentUrl();
         assert.strictEqual(currentUrl, 'https://weyoco.com/en/posts');
     })
+    it ('TC-005 - Verify display post page', async () => {
+        await homePage.clickCard1();
+        await postPage.isBackButtonDisplayed();
+        await postPage.isThankButtonDisplayed();
+        await postPage.isShareButtonDisplayed();
+        await postPage.isSaveButtonDisplayed();
+        await postPage.isDiscussionButtonDisplayed();
+        await postPage.isDownloadAppButtonDisplayed();
+        await postPage.isNavigateToTopButtonDisplayed();
+    })
+    it ('TC-006 - Verify click thank you button', async () => {
+        await homePage.clickCard1();
+        await postPage.clickThankButton();
+        assert.strictEqual(await postPage.isTryTheAppBannerDisplayed(), true);
+    })
+    it ('TC-007 - Verify Try The App Banner', async () => {
+        await homePage.clickCard1();
+        await postPage.clickThankButton();
+        assert.strictEqual(await postPage.isTryTheAppBannerDisplayed(), true);
+        assert.strictEqual(await postPage.isBarcode_bannerDisplayed(), true);
+        assert.strictEqual(await postPage.isMessage_bannerDisplayed(), true);
+        assert.strictEqual(await postPage.isTitle_bannerDisplayed(), true);
+        assert.strictEqual(await postPage.isXButton_bannerDisplayed(), true);
+        assert.strictEqual(await postPage.isAppleButton_bannerDisplayed(), true);
+        assert.strictEqual(await postPage.isAndroidButton_bannerDisplayed(), true);
+    })
+
+    it ('TC-008 - Verify click share button', async () => {
+        await homePage.clickCard1();
+        await postPage.clickShareButton();
+        assert.strictEqual(await postPage.isShareToastDisplayed(), true);
+    })
+    it ('TC-009 - Verify click save button', async () => {
+        await homePage.clickCard1();
+        await postPage.clickSaveButton();
+        assert.strictEqual(await postPage.isTryTheAppBannerDisplayed(), true);
+    })
+    it ('TC-010 - Verify click discussion button', async () => {
+        await homePage.clickCard1();
+        await postPage.clickDiscussionButton();
+        assert.strictEqual(await postPage.isTryTheAppBannerDisplayed(), true);
+    })
+    it ('TC-011 - Verify click download app button', async () => {
+        await homePage.clickCard1();
+        await postPage.clickDownloadAppButton();
+        assert.strictEqual(await postPage.isTryTheAppBannerDisplayed(), true);
+    })
+    it ('TC-012 - Verify click scroll to top button', async () => {
+        await homePage.clickCard1();
+        await driver.sleep(1000);
+        await postPage.scrollToBottom();
+        await postPage.clickScrollToTopButton();
+    })
+    it ('TC-013 - Verify click back button inside the post page', async () => {
+        await homePage.clickCard1();
+        await postPage.clickBackButton();
+        const currentUrl = await driver.getCurrentUrl();
+        assert.strictEqual(currentUrl, 'https://weyoco.com/en/posts');
+    })
+
 
     afterEach(async () => {
         if (driver) {
-            await driver.sleep(1000);
+            // await driver.sleep(500);
             await driver.quit();
         }
     });

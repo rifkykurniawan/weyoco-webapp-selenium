@@ -21,13 +21,13 @@ class HomePage {
         this.vegetarianTopic = By.xpath('/html/body/div[1]/div[2]/div/button[5]')
         this.riceCookerTopic = By.xpath('/html/body/div[1]/div[2]/div/button[6]')
         this.recipeFromCookingTopic = By.xpath('/html/body/div[1]/div[2]/div/button[7]')
-        this.card1 = By.xpath('/html/body/div[1]/div[2]/main/div[1]/a[1]/div/div[1]/div/div[2]')
+        this.card1 = By.xpath('/html/body/div[1]/div[2]/main/div[1]/a[2]/div')
     }  
 
     async clickCard1() {
-        await this.driver.wait(until.elementLocated(this.card1), 5000);
+        await this.driver.wait(until.elementLocated(this.card1), 10000);
         const card1 = await this.driver.findElement(this.card1);
-        await this.driver.wait(until.elementIsVisible(card1), 5000);
+        await this.driver.wait(until.elementIsVisible(card1), 10000);
         await card1.click();
     }
 
