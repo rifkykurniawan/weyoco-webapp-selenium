@@ -3,15 +3,13 @@ const {By,until} = require('selenium-webdriver');
 class HomePage {
     constructor(driver) {
         this.driver = driver;
-        this.searchInput = By.className('gLFyf');
-        this.searchButton = By.className('gNO89b');
         this.weyocoLogo = By.css('img[src="/weyoco.svg"]');
         this.searchBar = By.xpath('/html/body/header/div/div[2]/input')
         this.homeButtonCopy = By.xpath('/html/body/div[1]/aside/div/a[1]/p')
-        this.collaborationButton = By.xpath('/html/body/div[1]/aside/div/a[2]')
+        this.collaborationButton = By.xpath("//a[p[text()='Collaborations']]")
         this.changeLanguageButton = By.xpath('/html/body/div[1]/aside/button')
         this.contentCard = By.className('h-fit space-y-2')
-        this.tryTheAppButton = By.xpath('/html/body/header/div/button')
+        this.tryTheAppButton = By.xpath("//button[text()='Try the App']")
         this.downloadAppButton = By.xpath('/html/body/div[2]/button[1]')
         this.scrollToTopButton = By.xpath('/html/body/div[2]/button[2]')
         this.listTopicsButton = By.xpath('/html/body/div[1]/div[2]/div')
@@ -22,6 +20,94 @@ class HomePage {
         this.riceCookerTopic = By.xpath('/html/body/div[1]/div[2]/div/button[6]')
         this.recipeFromCookingTopic = By.xpath('/html/body/div[1]/div[2]/div/button[7]')
         this.card1 = By.xpath('/html/body/div[1]/div[2]/main/div[1]/a[2]/div')
+        this.searchInput = By.xpath('/html/body/header/div/div[2]/input')
+        this.indonesiaLanguage = By.xpath("//p[text()='Bahasa Indonesia']/ancestor::button")
+        this.englishLanguage = By.xpath("//p[text()='English']/ancestor::button")
+        this.indonesiaButton = By.xpath("//button[contains(., 'ID')]")
+        this.englishButton = By.xpath("//button[contains(., 'EN')]")
+        this.viewCountNumber = By.xpath("//img[@alt='eye-icon']/following-sibling::p")
+        this.collaborationCard1 = By.xpath("//div[@data-radix-aspect-ratio-wrapper]//div[@class='flex items-center gap-1']/p[@data-slot='text']")
+    }
+
+    async isCollaborationButtonActive() {
+        await this.driver.wait(until.elementLocated(this.collaborationButton), 10000);
+        const collaborationButton = await this.driver.findElement(this.collaborationButton);
+        await this.driver.wait(until.elementIsVisible(collaborationButton), 10000);
+        const img = await collaborationButton.findElement(By.tagName('img'));
+        const src = await img.getAttribute('src');
+        return src.includes('/icons/collaborations-active.svg');
+    }
+    
+
+    async clickCollaborationCard1() {
+        await this.driver.wait(until.elementLocated(this.collaborationCard1), 10000);
+        const collaborationCard1 = await this.driver.findElement(this.collaborationCard1);
+        await this.driver.wait(until.elementIsVisible(collaborationCard1), 10000);
+        await collaborationCard1.click();
+    }
+
+    async getViewCountNumber() {
+        await this.driver.wait(until.elementLocated(this.viewCountNumber), 10000);
+        const viewCountNumber = await this.driver.findElement(this.viewCountNumber);
+        await this.driver.wait(until.elementIsVisible(viewCountNumber), 10000);
+        const countText = await viewCountNumber.getText();
+        console.log("View count:", countText);
+        const countNumber = parseInt(countText.trim(), 10);
+        if (isNaN(countNumber)) {
+            throw new Error(`Failed to parse view count number from text: "${countText}"`);
+        }
+        return countNumber;
+    }
+    
+    async getEnglishButtonText() {
+        await this.driver.wait(until.elementLocated(this.englishButton), 10000);
+        const englishButton = await this.driver.findElement(this.englishButton);
+        await this.driver.wait(until.elementIsVisible(englishButton), 10000);
+        return await englishButton.getText();
+    }
+    async getIndonesiaButtonText() {
+        await this.driver.wait(until.elementLocated(this.indonesiaButton), 10000);
+        const indonesiaButton = await this.driver.findElement(this.indonesiaButton);
+        await this.driver.wait(until.elementIsVisible(indonesiaButton), 10000);
+        return await indonesiaButton.getText();
+    }
+    async clickIndonesiaLanguage() {
+        await this.driver.wait(until.elementLocated(this.indonesiaLanguage), 10000);
+        const indonesiaLanguage = await this.driver.findElement(this.indonesiaLanguage);
+        await this.driver.wait(until.elementIsVisible(indonesiaLanguage), 10000);
+        await indonesiaLanguage.click();
+    }
+    async clickEnglishLanguage() {
+        await this.driver.wait(until.elementLocated(this.englishLanguage), 10000);
+        const englishLanguage = await this.driver.findElement(this.englishLanguage);
+        await this.driver.wait(until.elementIsVisible(englishLanguage), 10000);
+        await englishLanguage.click();
+    }
+    async isEnglishLanguageDisplayed() {
+        await this.driver.wait(until.elementLocated(this.englishLanguage), 10000);
+        const englishLanguage = await this.driver.findElement(this.englishLanguage);
+        return await englishLanguage.isDisplayed();
+    }
+    async isIndonesiaLanguageDisplayed() {
+        await this.driver.wait(until.elementLocated(this.indonesiaLanguage), 10000);
+        const indonesiaLanguage = await this.driver.findElement(this.indonesiaLanguage);
+        return await indonesiaLanguage.isDisplayed();
+    }
+    async clickChangeLanguageButton() {
+        await this.driver.wait(until.elementLocated(this.changeLanguageButton), 10000);
+        const changeLanguageButton = await this.driver.findElement(this.changeLanguageButton);
+        await this.driver.wait(until.elementIsVisible(changeLanguageButton), 10000);
+        await changeLanguageButton.click();
+    }
+
+    async clickTryTheAppButton() {
+        await this.driver.wait(until.elementLocated(this.tryTheAppButton), 10000);
+        const tryTheAppButton = await this.driver.findElement(this.tryTheAppButton);
+        await this.driver.wait(until.elementIsVisible(tryTheAppButton), 10000);
+        await tryTheAppButton.click();
+    }
+    async setSearchInput(searchInput) {
+        await this.driver.findElement(this.searchInput).sendKeys(searchInput);
     }  
 
     async clickCard1() {
@@ -90,7 +176,9 @@ class HomePage {
     }
 
     async clickCollaborationButton() {
+        await this.driver.wait(until.elementLocated(this.collaborationButton), 10000);
         const collaborationButton = await this.driver.findElement(this.collaborationButton);
+        await this.driver.wait(until.elementIsVisible(collaborationButton), 10000);
         await collaborationButton.click();
     }
 

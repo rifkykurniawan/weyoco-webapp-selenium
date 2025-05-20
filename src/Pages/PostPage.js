@@ -10,9 +10,7 @@ class PostPage {
         this.downloadAppButton = By.xpath('/html/body/main/div[3]/button[5]')
         this.navigateToTopButton = By.xpath('/html/body/main/div[3]/button[6]')
         this.backButton = By.xpath('/html/body/main/div[1]/button')
-        
         this.tryTheAppBanner = By.xpath("//div[@role='dialog' and .//h4[text()='Try the App']]");
-
         this.barcode_banner = By.xpath("//img[@alt='weyoco-app-qr']");
         this.message_banner = By.xpath("//p[text()='Discover more content and join some information by scan QR or install from AppStore and PlayStore.']");
         this.title_banner = By.xpath("//h4[text()='Try the App']");
@@ -20,6 +18,19 @@ class PostPage {
         this.appleButton_banner = By.xpath("//img[@alt='app-store']");
         this.androidButton_banner = By.xpath("//img[@alt='google-play']");
         this.shareToast = By.xpath('/html/body/section')
+        this.joinCollaborationButton = By.xpath("//button[text()='Join the collaboration']");
+    }
+    async clickJoinCollaborationButton() {
+        await this.driver.wait(until.elementLocated(this.joinCollaborationButton), 5000);
+        const joinCollaborationButton = await this.driver.findElement(this.joinCollaborationButton);
+        await this.driver.wait(until.elementIsVisible(joinCollaborationButton), 5000);
+        await joinCollaborationButton.click();
+    }
+    async isJoinCollaborationButtonDisplayed() {
+        await this.driver.wait(until.elementLocated(this.joinCollaborationButton), 5000);
+        const joinCollaborationButton = await this.driver.findElement(this.joinCollaborationButton);
+        await this.driver.wait(until.elementIsVisible(joinCollaborationButton), 5000);
+        return await joinCollaborationButton.isDisplayed();
     }
     async clickBackButton() {
         await this.driver.wait(until.elementLocated(this.backButton), 5000);

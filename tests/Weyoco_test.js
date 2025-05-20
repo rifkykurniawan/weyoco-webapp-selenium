@@ -1,4 +1,4 @@
-const {Builder, until} = require('selenium-webdriver');
+const {Builder, until,Key} = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const assert = require('assert');
 const HomePage = require('../src/Pages/HomePage');
@@ -12,6 +12,7 @@ describe('Weyoco Website', function() {
     this.timeout(10000);
     beforeEach(async function() {
         const options = new chrome.Options();
+        // options.addArguments('--headless');
         driver = await new Builder()
             .forBrowser('chrome')
             .setChromeOptions(options)
@@ -127,11 +128,66 @@ describe('Weyoco Website', function() {
         const currentUrl = await driver.getCurrentUrl();
         assert.strictEqual(currentUrl, 'https://weyoco.com/en/posts');
     })
-
+    it ('TC-014 - Verify search content', async () => {
+        await homePage.setSearchInput('Baking');
+        await driver.actions().sendKeys(Key.ENTER).perform();
+        assert.strictEqual(await homePage.isContentCardDisplayed(), true);
+    })
+    it ('TC-015 - Verify click try the app button', async () => {
+        await homePage.clickTryTheAppButton();
+        assert.strictEqual(await postPage.isTryTheAppBannerDisplayed(), true);
+    })
+    it ('TC-016 - Verify click change language button', async () => {
+        await homePage.clickChangeLanguageButton();
+        await driver.sleep(1000);
+        assert.strictEqual(await homePage.isEnglishLanguageDisplayed(), true);
+        assert.strictEqual(await homePage.isIndonesiaLanguageDisplayed(), true);
+    })
+    it ('TC-017 - Verify change the language to Indonesia', async () => {
+        await homePage.clickChangeLanguageButton();
+        await homePage.clickIndonesiaLanguage();
+        assert.strictEqual(await homePage.getIndonesiaButtonText(), 'ID');
+    })
+    it ('TC-018 - Verify change the language to English', async () => {
+        await homePage.clickChangeLanguageButton();
+        await homePage.clickIndonesiaLanguage();
+        assert.strictEqual(await homePage.getIndonesiaButtonText(), 'ID');
+        await homePage.clickChangeLanguageButton();
+        await homePage.clickEnglishLanguage();
+        assert.strictEqual(await homePage.getEnglishButtonText(), 'EN');
+    })
+    it ('TC-019 - Verify update views numbers', async () => {
+        const initialCount = await homePage.getViewCountNumber();
+        await homePage.clickCard1();
+        await driver.executeScript("window.location.href = 'https://weyoco.com';");
+        const updatedCount = await homePage.getViewCountNumber();
+        assert.strictEqual(
+            updatedCount,
+            initialCount + 1,
+            `Expected view count to increase by 1 (was ${initialCount}, now ${updatedCount})`
+        );
+    })
+    it('TC-020 - Verify click request join button inside the collaboration post page', async () => {
+        await homePage.clickCollaborationButton();
+        await driver.sleep(1000)
+        await homePage.isCollaborationButtonActive();
+        await homePage.clickCollaborationCard1();
+        assert.strictEqual(await postPage.isJoinCollaborationButtonDisplayed(), true);
+        await postPage.clickJoinCollaborationButton();
+        assert.strictEqual(await postPage.isTryTheAppBannerDisplayed(), true);
+    })
+    it('TC-021 - Verify click back inside the collaboration post page', async () => {
+        await homePage.clickCollaborationButton();
+        await driver.sleep(1000)
+        await homePage.isCollaborationButtonActive();
+        await homePage.clickCollaborationCard1();
+        await postPage.clickBackButton();
+        const currentUrl = await driver.getCurrentUrl();
+        assert.strictEqual(currentUrl, 'https://weyoco.com/en/collaborations');
+    })
 
     afterEach(async () => {
         if (driver) {
-            // await driver.sleep(500);
             await driver.quit();
         }
     });
